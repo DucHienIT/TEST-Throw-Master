@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class DucHienMonoBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        
+        this.LoadComponents();
+    }
+    protected virtual void OnEnable()
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Reset()
     {
-        
+        this.LoadComponents();
+        this.ResetValue();
+    }
+    protected virtual void Awake()
+    {
+        this.LoadComponents();
+    }
+
+    protected virtual void LoadComponents()
+    {
+
+    }
+    protected virtual void ResetValue()
+    {
+
     }
 }
