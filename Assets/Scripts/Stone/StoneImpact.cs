@@ -42,10 +42,36 @@ public class StoneImpact : DucHienMonoBehaviour
     }
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Vector3 direction = other.transform.position - transform.position;
+        if (CheckIsEnemy(other.transform))
+        {
+            StoneSpawner.Instance.Despawn(transform.parent);
+            return;
+        }
 
-        this.stoneCtrl.StoneFly.ChangeRotationFly(direction);
-        Debug.Log("OnTriggerEnter2D: " + other.gameObject.name);
+        if (other.CompareTag("verticalWall"))
+        {
+            ChangeRotation(180f);
+            return;
+        }
+        ChangeRotation(0f);
+
     }
+
+    protected virtual bool CheckIsEnemy (Transform transform)
+    {
+        if (transform.parent.name == "Enemy")
+        {
+            return true;
+        }
+        return false;
+    }
+
+    protected virtual void ChangeRotation(float value)
+    {
+        
+        float angle = -transform.parent.rotation.eulerAngles.z + value;
+        transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+    }
+
 }
 

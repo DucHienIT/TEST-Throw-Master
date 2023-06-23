@@ -6,6 +6,8 @@ public class LineStoneThrow : DucHienMonoBehaviour
 {
     [SerializeField] protected float throwForce = 10f;
     [SerializeField] protected LineRenderer lineRenderer;
+    [SerializeField] protected int maxPoints = 100;
+    [SerializeField] protected float pointSpacing = 0.1f;
 
     protected override void LoadComponents()
     {
@@ -42,15 +44,20 @@ public class LineStoneThrow : DucHienMonoBehaviour
 
     protected void DrawStraightTrajectory(Vector3 endPosition)
     {
-        Vector3[] points = new Vector3[2];
-        points[0] = transform.position;
-        points[1] = endPosition;
+        int numPoints = Mathf.CeilToInt(Vector3.Distance(transform.position, endPosition) / pointSpacing) + 1;
+        numPoints = Mathf.Min(numPoints, maxPoints);
 
         lineRenderer.startWidth = 0.1f; // Đặt độ rộng tại điểm đầu của line
         lineRenderer.endWidth = 0.1f; // Đặt độ rộng tại điểm cuối của line
 
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPositions(points);
+        lineRenderer.positionCount = numPoints;
+
+        for (int i = 0; i < numPoints; i++)
+        {
+            float t = (float)i / (numPoints - 1);
+            Vector3 point = Vector3.Lerp(transform.position, endPosition, t);
+            lineRenderer.SetPosition(i, point);
+        }
     }
 
     protected void DrawBouncingTrajectory(Vector3 direction)
@@ -59,7 +66,7 @@ public class LineStoneThrow : DucHienMonoBehaviour
         List<Vector3> points = new List<Vector3>();
         points.Add(currentPosition);
 
-        while (points.Count < 100)
+        while (points.Count < maxPoints)
         {
             Vector3 nextPosition = currentPosition + direction * throwForce * Time.fixedDeltaTime;
             RaycastHit2D hit = Physics2D.Raycast(currentPosition, direction, throwForce * Time.fixedDeltaTime);

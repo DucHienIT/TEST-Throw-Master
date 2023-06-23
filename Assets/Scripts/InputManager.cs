@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputManager : DucHienMonoBehaviour
 {
@@ -12,6 +12,11 @@ public class InputManager : DucHienMonoBehaviour
     protected bool isThrowing = false;
     public bool IsThrowing { get { return this.isThrowing; } }
 
+    protected override void Start()
+    {
+        base.Start();
+        this.SetLandscapeOrientation();
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -22,7 +27,6 @@ public class InputManager : DucHienMonoBehaviour
         }
         InputManager.instance = this;
 
-        DontDestroyOnLoad(this.gameObject);
     }
 
     protected virtual void Update()
@@ -46,5 +50,11 @@ public class InputManager : DucHienMonoBehaviour
             }
             isHolding = false;
         }
+    }
+
+    protected virtual void SetLandscapeOrientation()
+    {
+        // Đặt chế độ màn hình ngang
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 }

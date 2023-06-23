@@ -8,6 +8,11 @@ public class CharacterThrow : DucHienMonoBehaviour
     private Animator animator;
     private bool hasThrown = false; // Biến để kiểm tra xem đã ném đá hay chưa
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        hasThrown = true; 
+    }
     protected override void Start()
     {
         animator = transform.parent.GetComponentInChildren<Animator>();
